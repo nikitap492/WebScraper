@@ -1,6 +1,6 @@
 package scraper.domain;
 
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  * @author Poshivalov Nikita
@@ -8,13 +8,13 @@ import java.util.ArrayList;
  */
 public class WebPage implements Parsable{
 
-    private final ArrayList<String> text;
+    private final List<String> text;
 
-    public WebPage(ArrayList<String> text) {
+    public WebPage(List<String> text) {
         this.text = text;
     }
 
-    public ArrayList<String> getText() {
+    public List<String> getText() {
         return text;
     }
 }
