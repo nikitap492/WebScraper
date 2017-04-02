@@ -1,7 +1,9 @@
 package scraper;
 
 
-import scraper.engine.impl.WebScraperEngine;
+import scraper.engine.impl.EngineConfigurator;
+import scraper.logger.Logger;
+import scraper.logger.LoggerFactory;
 
 /**
  * @author Poshivalov Nikita
@@ -9,7 +11,13 @@ import scraper.engine.impl.WebScraperEngine;
  */
 public class WebScraper {
 
+    private static final Logger log = LoggerFactory.obtain(WebScraper.class);
+
     public static void main(String args[]) throws Exception {
-        new WebScraperEngine().run(args);
+        log.info("Application starting ....");
+        EngineConfigurator
+                .configure()
+                .defaultConfiguration()
+                .run(args);
     }
 }
