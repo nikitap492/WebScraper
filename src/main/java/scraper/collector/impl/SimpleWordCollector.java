@@ -21,7 +21,10 @@ public class SimpleWordCollector implements WordCollector {
     public List<String> collect(Collection<String> collection) {
         log.debug("Collecting words");
         return collection.stream()
-                .flatMap(n -> Arrays.stream(n.split(" ")))
+                .flatMap(n -> Arrays.stream(n
+                                .toUpperCase()
+                                .replaceAll("[^A-Z0-9]"," ")
+                                .split(" ")))
                 .collect(Collectors.toList());
     }
 }
