@@ -1,9 +1,21 @@
 group 'scraper'
-version '0.1'
+version '1.0'
 
 apply plugin: 'java'
+apply plugin: 'jacoco'
 
 sourceCompatibility = 1.8
+
+
+jar {
+    manifest {
+        attributes(
+                'Main-Class': 'scraper.WebScraper'
+        )
+    }
+    baseName 'scraper'
+    version = null
+}
 
 repositories {
     mavenCentral()
@@ -12,4 +24,17 @@ repositories {
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.11'
     testCompile 'org.mockito:mockito-all:1.9.5'
+}
+
+check.dependsOn jacocoTestReport
+
+test {
+    exclude "./**"
+}
+
+jacocoTestReport {
+    reports {
+        html.enabled = true
+        xml.enabled = true
+    }
 }
