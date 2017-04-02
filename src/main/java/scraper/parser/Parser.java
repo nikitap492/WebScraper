@@ -10,7 +10,7 @@ import java.util.List;
  * @since 31.03.2017.
  */
 @FunctionalInterface
-public interface Parser {
+interface Parser {
 
       ParseEntity<? extends Parsable> parse(List<String> strings);
 }
