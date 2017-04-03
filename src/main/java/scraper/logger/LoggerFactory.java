@@ -9,6 +9,8 @@ import java.time.LocalDateTime;
 /**
  * @author Poshivalov Nikita
  * @since 31.03.2017.
+ *
+ * Logger factory. {@code Class<?> clazz}
  */
 public class LoggerFactory {
     private static PrintStream printStream = System.out;
@@ -28,6 +30,10 @@ public class LoggerFactory {
     private LoggerFactory() {
     }
 
+    /**
+     * Nested class that is returned by {@link LoggerFactory}
+     * and implements {@link Logger}
+     */
     private static class SimpleLogger implements Logger{
 
         private String className;
@@ -47,6 +53,11 @@ public class LoggerFactory {
         }
 
 
+        /**
+         *  Prints in {@link LoggerFactory#printStream}
+         *  then {@link Property#VERBOSE} in enable
+         *  in {@link scraper.config.PropertiesConfiguration}
+         */
         public void debug(String msg) {
             if (Debug.isEnable()) {
                 printStream.println(LocalDateTime.now()  + " " + className + " debug: " + msg);
@@ -54,6 +65,9 @@ public class LoggerFactory {
         }
     }
 
+    /**
+     * Lazy debug initialization
+     */
     private static class Debug {
         private static Boolean enable = null;
 

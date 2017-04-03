@@ -12,12 +12,19 @@ import java.util.List;
 /**
  * @author Poshivalov Nikita
  * @since 31.03.17.
+ *
+ * Implementation of {@link TextParser}
  */
 public class SimpleTextParser implements TextParser {
 
     private static final Logger log = LoggerFactory.obtain(SimpleTextParser.class);
 
 
+    /**
+     * @param text is data from URL
+     * @return {@link ParseEntity<WebPageText>}
+     * that contains text from web pages {@link WebPageText#text}
+     */
     @Override
     public ParseEntity<WebPageText> parse(List<String> text) {
         log.debug("Parsing html text...");
@@ -26,11 +33,11 @@ public class SimpleTextParser implements TextParser {
             char[] chars = str.toCharArray();
             for (int i = 0; i < chars.length; ) {
                 if (chars[i] == 60) {
-                    while (i < chars.length && chars[i] != 62) i++;
+                    while (i < chars.length && chars[i] != 62) i++; // char "<"
                     i++;
                 } else {
                     int k = i;
-                    while (i < chars.length && chars[i] != 60) i++;
+                    while (i < chars.length && chars[i] != 60) i++; // char ">"
                     if (k < i) parseText.add(str.substring(k, i));
                 }
 

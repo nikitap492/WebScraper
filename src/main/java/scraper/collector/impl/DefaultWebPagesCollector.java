@@ -16,6 +16,8 @@ import java.util.List;
 /**
  * @author Poshivalov Nikita
  * @since 31.03.17.
+ *
+ * Implementation of {@link WebPagesCollector}
  */
 public class DefaultWebPagesCollector implements WebPagesCollector {
 

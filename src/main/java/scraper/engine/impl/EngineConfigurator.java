@@ -20,6 +20,11 @@ import scraper.parser.impl.SimpleTextParser;
 /**
  * @author Poshivalov Nikita
  * @since 01.04.17.
+ *
+ * Configurator for
+ * {@link Engine}.
+ * Use pattern builder
+ * return {@link WebScraperEngine}
  */
 public class EngineConfigurator {
 
@@ -71,6 +76,9 @@ public class EngineConfigurator {
         return engine;
     }
 
+    /**
+     * Setup default engine configuration
+     */
     public Engine defaultConfiguration(){
         CommonAnalyzer commonAnalyzer = new CommonAnalyzer(new SimpleWordCollector());
         wordAnalyzer(commonAnalyzer);

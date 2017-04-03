@@ -17,6 +17,9 @@ public class ApplicationPropertiesConfiguration implements PropertiesConfigurati
     private Map<Property, Boolean> map;
     private static PropertiesConfiguration configuration = null;
 
+    /**
+     * All properties disables by default
+     */
     private ApplicationPropertiesConfiguration() {
         this.map = new HashMap<>();
         for (Property property : Property.values()){
@@ -24,16 +27,26 @@ public class ApplicationPropertiesConfiguration implements PropertiesConfigurati
         }
     }
 
+    /**
+     *{@inheritDoc}
+     */
     @Override
     public void setProperty(Property property, boolean value) {
         map.put(property, value);
     }
 
+    /**
+     *{@inheritDoc}
+     */
     @Override
     public boolean getValue(Property property) {
         return map.get(property);
     }
 
+    /**
+     * Singleton with lazy initialization for logger
+     * @return {@link ApplicationPropertiesConfiguration}
+     */
     public static PropertiesConfiguration configuration(){
         if (configuration == null) {
             configuration = new ApplicationPropertiesConfiguration();

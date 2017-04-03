@@ -11,5 +11,11 @@ import java.util.List;
  */
 public interface URLFileReader extends URLReader{
 
+    /**
+     * Collects urls form file
+     * @param file is file with urls
+     * @return url container
+     * @throws IOException during reading
+     */
     List<URL> urls(File file) throws IOException;
 }

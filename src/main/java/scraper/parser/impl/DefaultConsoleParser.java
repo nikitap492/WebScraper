@@ -25,6 +25,10 @@ import java.util.stream.Collectors;
 /**
  * @author Poshivalov Nikita
  * @since 31.03.2017.
+ *
+ * {@link DefaultConsoleParser}  is implementation of
+ * {@link ConsoleParser}
+ *
  */
 public class DefaultConsoleParser implements ConsoleParser {
 
@@ -32,6 +36,10 @@ public class DefaultConsoleParser implements ConsoleParser {
 
    private URLFileReader urlFileReader = new DefaultURLFileReader();
 
+
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public ParseEntity<ConsoleParseData> parse(List<String> args) {
 
@@ -66,13 +74,26 @@ public class DefaultConsoleParser implements ConsoleParser {
         return ParseEntity.body(new ConsoleParseData(urls, words));
     }
 
+
+    /**
+     * Setter for
+     * @param URLFileReader
+     */
     public void setURLFileReader(URLFileReader URLFileReader) {
         this.urlFileReader = URLFileReader;
         log.info("URLFileReader was configured");
     }
 
 
-
+    /**
+     * Method checks that
+     * @param path
+     * references on file or url
+     * If there is file reference then
+     * {@link URLFileReader} is used
+     * @return list url sources
+     * @throws URLParseException
+     */
     private List<URL> obtainUrls(String path) {
         log.debug("Trying to obtain source from " + path);
         File file = new File(path);
@@ -92,14 +113,32 @@ public class DefaultConsoleParser implements ConsoleParser {
         return urls;
     }
 
+    /**
+     * Splits
+     * @param words
+     * on words and
+     * @return those as list
+     */
     private List<String> searchingWords(String words) {
         return Arrays.asList(words.toUpperCase().split(","));
     }
 
+    /**
+     * Quick wrapper for
+     * @param property
+     * configuration
+     */
     private void quickSetter(Property property) {
         ApplicationPropertiesConfiguration.configuration().setProperty(property, true);
     }
 
+    /**
+     * Methods takes
+     * @param args
+     * list of options.
+     * @throws UnknownOptionWasFoundException
+     * then option is unknowm
+     */
     private void setConfigurationProperties(List<String> args) {
         for (String option : args) {
             switch (option.toUpperCase()) {

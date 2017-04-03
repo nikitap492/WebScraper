@@ -11,6 +11,11 @@ import java.util.List;
  */
 public interface TextParser extends Parser{
 
+    /**
+     *
+     * @param text is data from URL
+     * @see WebPageText
+     */
     @Override
     ParseEntity<WebPageText> parse(List<String> text);
 }

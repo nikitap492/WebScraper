@@ -5,6 +5,10 @@ import java.util.List;
 /**
  * @author Poshivalov Nikita
  * @since 31.03.17.
+ *
+ * Text parse entity is obtained to  {@link scraper.parser.TextParser}
+ * implements marker interface {@link Parsable}
+ * and is collected by {@link scraper.collector.WordCollector}
  */
 public class WebPageText implements Parsable {
 

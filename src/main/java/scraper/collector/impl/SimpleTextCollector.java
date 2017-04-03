@@ -12,6 +12,8 @@ import java.util.stream.Collectors;
 /**
  * @author Poshivalov Nikita
  * @since 01.04.17.
+ *
+ * Implementation of {@link TextCollector}
  */
 public class SimpleTextCollector implements TextCollector {
 

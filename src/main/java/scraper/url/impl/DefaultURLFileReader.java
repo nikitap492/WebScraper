@@ -23,7 +23,12 @@ public class DefaultURLFileReader implements URLFileReader {
 
     private static final Logger log = LoggerFactory.obtain(URLFileReader.class);
 
-
+    /**
+     *
+     * @param file is file with urls
+     * @return container
+     * @throws IOException, URLParseException
+     */
     @Override
     public List<URL> urls(File file) throws IOException {
         List<URL> urls = new ArrayList<>();
@@ -41,7 +46,12 @@ public class DefaultURLFileReader implements URLFileReader {
         return urls;
     }
 
-
+    /**
+     * @param urls is container
+     * @param url is source
+     * @throws MalformedURLException, URLParseException
+     *
+     */
     @Override
     public void addURL(List<URL> urls, String url) throws MalformedURLException {
         if(URLValidator.validate(url)){

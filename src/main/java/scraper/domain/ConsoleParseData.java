@@ -6,6 +6,9 @@ import java.util.List;
 /**
  * @author Poshivalov Nikita
  * @since 31.03.17.
+ *
+ * Console parse entity is used to {@link scraper.parser.ConsoleParser}
+ * implements marker interface {@link Parsable}
  */
 public class ConsoleParseData implements Parsable {
 

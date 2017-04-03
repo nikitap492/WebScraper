@@ -42,7 +42,9 @@ public class WebScraperEngine implements Engine{
     private WordAnalyzer wordAnalyzer;
     private long start;
 
-
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void run(String[] args) {
         //formatter:off
@@ -54,6 +56,9 @@ public class WebScraperEngine implements Engine{
         //formatter:on
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public ParseEntity<ConsoleParseData> console(String[] args) {
         ParseEntity<ConsoleParseData> parse = consoleParser.parse(Arrays
@@ -63,6 +68,9 @@ public class WebScraperEngine implements Engine{
         return parse;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public Collection<WebPage> webPages(ParseEntity<ConsoleParseData> consoleResult) {
         long start = System.nanoTime();
@@ -74,17 +82,26 @@ public class WebScraperEngine implements Engine{
         return webPages;
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public List<String> text(Collection<WebPage> webPages) {
         start = System.nanoTime();
         return textCollector.collect(webPages);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public ParseEntity<WebPageText> parse(List<String> text) {
         return textParser.parse(text);
     }
 
+    /**
+     * {@inheritDoc}
+     */
     @Override
     public void analyze(ParseEntity<WebPageText> parseEntity) {
         setData(parseEntity
@@ -108,6 +125,10 @@ public class WebScraperEngine implements Engine{
 
     }
 
+    /**
+     * @param data
+     * Data setter
+     */
     private void setData(List<String> data){
         sentencesAnalyzer.data(data);
         charsAnalyzer.data(data);
@@ -117,6 +138,10 @@ public class WebScraperEngine implements Engine{
     WebScraperEngine(){
 
     }
+
+    /**
+     * setters
+     */
 
     void setConsoleParser(ConsoleParser consoleParser) {
         this.consoleParser = consoleParser;

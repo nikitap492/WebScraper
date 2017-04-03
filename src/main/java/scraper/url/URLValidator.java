@@ -10,6 +10,8 @@ import java.net.URL;
 /**
  * @author Poshivalov Nikita
  * @since 31.03.2017.
+ *
+ * Validates url connection
  */
 public final class URLValidator {
     private static final Logger log = LoggerFactory.obtain(URLValidator.class);
