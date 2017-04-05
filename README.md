@@ -1,5 +1,6 @@
 [![Build Status](https://travis-ci.org/nikitap492/WebScraper.svg?branch=master)](https://travis-ci.org/nikitap492/WebScraper)
 [![codecov.io](https://codecov.io/github/nikitap492/WebScraper/coverage.svg?branch=master)](https://travis-ci.org/nikitap492/WebScraper?branch=master)
+[![CodeFactor](https://www.codefactor.io/repository/github/nikitap492/webscraper/badge)](https://www.codefactor.io/repository/github/nikitap492/webscraper)
 # WebScraper
 **Simple data mining**
 ### Simple library for data scraping.
