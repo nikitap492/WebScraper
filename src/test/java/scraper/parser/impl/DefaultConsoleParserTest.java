@@ -2,9 +2,8 @@ package scraper.parser.impl;
 
 import org.junit.Before;
 import org.junit.Test;
-import scraper.config.ApplicationPropertiesConfiguration;
+import scraper.config.Configuration;
 import scraper.domain.ConsoleParseData;
-import scraper.domain.ParseEntity;
 import scraper.domain.Property;
 import scraper.exceptions.InputWasNotFoundException;
 import scraper.exceptions.MissingWordsException;
@@ -33,23 +32,22 @@ public class DefaultConsoleParserTest {
         options.add("Test,Word");
         options.add("-e");
         options.add("-w");
-        options.add("-v");
         options.add("-c");
     }
 
 
     @Test
     public void correctParse() throws Exception {
-        ParseEntity<ConsoleParseData> dataParseEntity = parser.parse(options);
-        assertTrue(ApplicationPropertiesConfiguration.configuration().getValue(Property.VERBOSE));
-        assertTrue(ApplicationPropertiesConfiguration.configuration().getValue(Property.CHARS_NUMBER));
-        assertTrue(ApplicationPropertiesConfiguration.configuration().getValue(Property.SENTENCES));
-        assertTrue(ApplicationPropertiesConfiguration.configuration().getValue(Property.WORDS_NUMBER));
-        List<String> words = dataParseEntity.getEntity().getWords();
+        ConsoleParseData dataParseEntity = parser.parse(options);
+        Configuration configuration = dataParseEntity.getConfiguration();
+        assertTrue(Boolean.valueOf(configuration.getValue(Property.SENTENCES.name())));
+        assertTrue(Boolean.valueOf(configuration.getValue(Property.CHARS.name())));
+        assertTrue(Boolean.valueOf(configuration.getValue(Property.WORDS.name())));
+        List<String> words = dataParseEntity.getWords();
         assertEquals("TEST", words.get(0));
         assertEquals("WORD", words.get(1));
         assertTrue(words.size() == 2);
-        List<URL> urls = dataParseEntity.getEntity().getUrls();
+        List<URL> urls = dataParseEntity.getUrls();
         assertTrue(urls.size() == 1);
         assertEquals(options.get(0), urls.get(0).toString());
     }

@@ -7,15 +7,15 @@ import scraper.analyzer.SentencesAnalyzer;
 import scraper.analyzer.WordAnalyzer;
 import scraper.collector.TextCollector;
 import scraper.collector.WebPagesCollector;
-import scraper.domain.ConsoleParseData;
-import scraper.domain.ParseEntity;
-import scraper.domain.WebPageText;
-import scraper.parser.ConsoleParser;
+import scraper.config.ApplicationPropertiesConfiguration;
+import scraper.config.Configuration;
+import scraper.domain.Property;
 import scraper.parser.TextParser;
 
 import java.util.ArrayList;
 
 import static org.mockito.Mockito.*;
+
 
 /**
  * @author Poshivalov Nikita
@@ -23,53 +23,53 @@ import static org.mockito.Mockito.*;
  */
 public class EngineTests {
 
-
-
     private static WebScraperEngine scraperEngine;
-    private static ArrayList<String> args = new ArrayList<>();
-    private static ParseEntity<ConsoleParseData> consoleParseData
-            = ParseEntity.body(new ConsoleParseData(new ArrayList<>(), new ArrayList<>()));
-
-    private static ParseEntity<WebPageText> webPageTextParseEntity
-            = ParseEntity.body(new WebPageText(new ArrayList<>()));
+    private static TextCollector textCollector = mock(TextCollector.class);
+    private static WordAnalyzer wordAnalyzer = mock(WordAnalyzer.class);
+    private static CharsAnalyzer charsAnalyzer = mock(CharsAnalyzer.class);
+    private static SentencesAnalyzer sentencesAnalyzer = mock(SentencesAnalyzer.class);
+    private static TextParser textParser = mock(TextParser.class);
+    private static WebPagesCollector webPagesCollector = mock(WebPagesCollector.class);
 
     @BeforeClass
     public static void createMock(){
 
-        ConsoleParser consoleParser = mock(ConsoleParser.class);
-        when(consoleParser.parse(args)).thenReturn(consoleParseData);
 
-        WebPagesCollector webPagesCollector = mock(WebPagesCollector.class);
-        TextParser textParser = mock(TextParser.class);
-        when(textParser.parse(new ArrayList<>())).thenReturn(webPageTextParseEntity);
 
-        TextCollector textCollector = mock(TextCollector.class);
-        WordAnalyzer wordAnalyzer = mock(WordAnalyzer.class);
-        CharsAnalyzer charsAnalyzer = mock(CharsAnalyzer.class);
-        SentencesAnalyzer sentencesAnalyzer = mock(SentencesAnalyzer.class);
 
-        scraperEngine = spy((WebScraperEngine) EngineConfigurator
-                .configure()
-                .consoleParser(consoleParser)
+
+
+        Configuration configuration = mock(ApplicationPropertiesConfiguration.class);
+        when(configuration.getValue(Property.SENTENCES.name())).thenReturn("true");
+        when(configuration.getValue(Property.WORDS.name())).thenReturn("true");
+        when(configuration.getValue(Property.CHARS.name())).thenReturn("true");
+
+        scraperEngine = (WebScraperEngine) EngineConfigurator
+                .configure(configuration)
                 .webPagesCollector(webPagesCollector)
                 .textParser(textParser)
                 .textCollector(textCollector)
                 .wordAnalyzer(wordAnalyzer)
                 .charsAnalyzer(charsAnalyzer)
                 .sentencesAnalyzer(sentencesAnalyzer)
-                .accept());
+                .accept();
     }
 
     @Test
     public void run(){
-        String[] strs = new String[]{};
-        scraperEngine.run(strs);
-        verify(scraperEngine, times(1)).console(strs);
-        verify(scraperEngine, times(1)).webPages(consoleParseData);
-        verify(scraperEngine, times(1)).text(new ArrayList<>());
-        verify(scraperEngine, times(1)).parse(new ArrayList<>());
-        verify(scraperEngine, times(1)).analyze(webPageTextParseEntity);
+
+        scraperEngine.run(new ArrayList<>());
+        verify(textParser).parse(new ArrayList<>());
+        verify(textCollector).collect(new ArrayList<>());
+        verify(webPagesCollector).collect(new ArrayList<>());
+        verify(textCollector, times(1)).collect(new ArrayList<>());
+        verify(wordAnalyzer, times(1)).wordsAnalyze(null);
+        verify(charsAnalyzer, times(1)).charsAnalyze();
+
+
     }
+
+
 
 
 

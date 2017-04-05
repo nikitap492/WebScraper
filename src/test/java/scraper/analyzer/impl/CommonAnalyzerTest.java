@@ -1,16 +1,16 @@
 package scraper.analyzer.impl;
 
-import org.junit.BeforeClass;
 import org.junit.Test;
 import scraper.collector.impl.SimpleWordCollector;
-import scraper.logger.LoggerFactory;
-import scraper.logger.LoggerFactoryTest;
 
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 /**
  * @author Poshivalov Nikita
@@ -34,45 +34,27 @@ public class CommonAnalyzerTest {
         commonAnalyzer.data(sentences);
     }
 
-    private static LoggerFactoryTest.MockPrintStream mockPrintStream
-            = new LoggerFactoryTest.MockPrintStream(System.out);
-
-    @BeforeClass
-    public static void setupPrintStream(){
-        LoggerFactory.setPrintStream(mockPrintStream);
-    }
 
     @Test
     public void testSentencesAnalyzer(){
-        commonAnalyzer.sentencesAnalyze(Stream.of("test")
-                .collect(Collectors.toList()));
-        assertEquals(there + is + just + forTest, mockPrintStream
-                                                    .getLastString()
-                                                    .substring(mockPrintStream.getLastString().lastIndexOf(": ") + 2));
+        Map<String, List<String>> test = commonAnalyzer.sentencesAnalyze(Stream.of("test").collect(Collectors.toList()));
+        assertEquals(there+ is + just + forTest, test.get("test").get(0));
+        assertTrue(test.get("test").size() == 1);
 
-        commonAnalyzer.sentencesAnalyze(Stream.of("world")
-                .collect(Collectors.toList()));
-        assertEquals(hello + world, mockPrintStream
-                .getLastString()
-                .substring(mockPrintStream.getLastString().lastIndexOf(": ") + 2));
     }
 
     @Test
     public void testCharsAnalyzer(){
-        commonAnalyzer.charsAnalyze();
         String all = (hello + world + there + is + just + forTest);
-        assertEquals("" + all.length(), mockPrintStream.getLastString().substring(
-                mockPrintStream.getLastString().lastIndexOf("equals") +  "equals ".length()));
+        assertEquals((long) all.length() , commonAnalyzer.charsAnalyze().longValue());
     }
 
     @Test
     public void testWordsAnalyze(){
-        commonAnalyzer.wordsAnalyze(Stream.of("test")
-                                        .collect(Collectors.toList()));
-        int extractTimes = Integer.valueOf(mockPrintStream.getLastString().substring(
-                mockPrintStream.getLastString().lastIndexOf("sources ") +  "sources ".length(),
-                mockPrintStream.getLastString().indexOf(" times")));
-        assertEquals(1, extractTimes);
+        Map<String, Long> test = commonAnalyzer.wordsAnalyze(Stream.of("test", "is")
+                .collect(Collectors.toList()));
+        assertEquals(Long.valueOf(1), test.get("test"));
+        assertEquals(Long.valueOf(1), test.get("is"));
     }
 
 

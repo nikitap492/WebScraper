@@ -10,19 +10,13 @@ import static org.junit.Assert.assertTrue;
  * @since 01.04.17.
  */
 public class ApplicationPropertiesConfigurationTest {
-
     @Test
     public void shouldPutAndGet(){
 
-        ApplicationPropertiesConfiguration
-                .configuration()
-                .setProperty(Property.VERBOSE, true);
-
-        boolean value = ApplicationPropertiesConfiguration
-                .configuration()
-                .getValue(Property.VERBOSE);
-
-        assertTrue(value);
+        Configuration configuration = new ApplicationPropertiesConfiguration();
+        configuration.setProperty(Property.SENTENCES.name(), "" + true);
+        String value = configuration.getValue(Property.SENTENCES.name());
+        assertTrue(Boolean.valueOf(value));
     }
 
 }
