@@ -1,5 +1,7 @@
 package scraper.engine.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import scraper.analyzer.CharsAnalyzer;
 import scraper.analyzer.SentencesAnalyzer;
 import scraper.analyzer.WordAnalyzer;
@@ -9,13 +11,12 @@ import scraper.collector.WebPagesCollector;
 import scraper.collector.impl.DefaultWebPagesCollector;
 import scraper.collector.impl.SimpleTextCollector;
 import scraper.collector.impl.SimpleWordCollector;
+import scraper.config.Configuration;
 import scraper.engine.Engine;
-import scraper.logger.Logger;
-import scraper.logger.LoggerFactory;
-import scraper.parser.ConsoleParser;
 import scraper.parser.TextParser;
-import scraper.parser.impl.DefaultConsoleParser;
 import scraper.parser.impl.SimpleTextParser;
+
+import java.util.List;
 
 /**
  * @author Poshivalov Nikita
@@ -28,17 +29,15 @@ import scraper.parser.impl.SimpleTextParser;
  */
 public class EngineConfigurator {
 
-    private static final Logger log = LoggerFactory.obtain(EngineConfigurator.class);
+    private static final Logger log = LoggerFactory.getLogger(EngineConfigurator.class);
+    private final WebScraperEngine engine;
 
-    public static EngineConfigurator configure(){
-        return new EngineConfigurator();
+    public static EngineConfigurator configure(Configuration configuration){
+        return new EngineConfigurator(configuration);
     }
 
-    private WebScraperEngine engine = new WebScraperEngine();
-
-    public EngineConfigurator consoleParser(ConsoleParser parser){
-        engine.setConsoleParser(parser);
-        return this;
+    public EngineConfigurator(Configuration configuration) {
+        this.engine = new WebScraperEngine(configuration);
     }
 
     public EngineConfigurator webPagesCollector(WebPagesCollector webPagesCollector){
@@ -79,17 +78,21 @@ public class EngineConfigurator {
     /**
      * Setup default engine configuration
      */
-    public Engine defaultConfiguration(){
+    public Engine useDefaultComponents(){
         CommonAnalyzer commonAnalyzer = new CommonAnalyzer(new SimpleWordCollector());
         wordAnalyzer(commonAnalyzer);
         charsAnalyzer(commonAnalyzer);
         sentencesAnalyzer(commonAnalyzer);
         textCollector(new SimpleTextCollector());
         webPagesCollector(new DefaultWebPagesCollector());
-        consoleParser(new DefaultConsoleParser());
         textParser(new SimpleTextParser());
-        log.info("WebScraper setup default configuration");
+        log.info("WebScraper setup default component");
         return engine;
     }
 
+
+    public EngineConfigurator search(List<String> words) {
+        engine.setSearchableWords(words);
+        return this;
+    }
 }

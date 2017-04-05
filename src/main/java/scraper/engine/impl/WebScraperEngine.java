@@ -1,26 +1,23 @@
 package scraper.engine.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import scraper.analyzer.CharsAnalyzer;
 import scraper.analyzer.SentencesAnalyzer;
 import scraper.analyzer.WordAnalyzer;
 import scraper.collector.TextCollector;
 import scraper.collector.WebPagesCollector;
-import scraper.config.ApplicationPropertiesConfiguration;
-import scraper.domain.ConsoleParseData;
-import scraper.domain.ParseEntity;
+import scraper.config.Configuration;
+import scraper.domain.EngineAnalyze;
 import scraper.domain.WebPage;
-import scraper.domain.WebPageText;
+import scraper.domain.WebScraperEngineAnalyze;
 import scraper.engine.Engine;
-import scraper.logger.Logger;
-import scraper.logger.LoggerFactory;
-import scraper.parser.ConsoleParser;
 import scraper.parser.TextParser;
 
+import java.net.URL;
 import java.text.DecimalFormat;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static scraper.domain.Property.*;
 
@@ -28,124 +25,67 @@ import static scraper.domain.Property.*;
  * @author Poshivalov Nikita
  * @since 01.04.17.
  */
-public class WebScraperEngine implements Engine{
+class WebScraperEngine implements Engine {
 
-    private static final Logger log = LoggerFactory.obtain(WebScraperEngine.class);
+    private static final Logger log = LoggerFactory.getLogger(WebScraperEngine.class);
+    private final Configuration configuration;
 
-    private List<String> words;
-    private ConsoleParser  consoleParser;
     private WebPagesCollector webPagesCollector;
     private TextCollector textCollector;
     private TextParser textParser;
     private SentencesAnalyzer sentencesAnalyzer;
     private CharsAnalyzer charsAnalyzer;
     private WordAnalyzer wordAnalyzer;
-    private long start;
+    private List<String> searchableWords;
+    private WebScraperEngineAnalyze analyzeResult = new WebScraperEngineAnalyze();
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public void run(String[] args) {
-        //formatter:off
-        analyze(
-                parse(
-                        text(
-                                webPages(
-                                        console(args)))));
-        //formatter:on
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public ParseEntity<ConsoleParseData> console(String[] args) {
-        ParseEntity<ConsoleParseData> parse = consoleParser.parse(Arrays
-                .stream(args)
-                .collect(Collectors.toList()));
-        this.words = parse.getEntity().getWords();
-        return parse;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public Collection<WebPage> webPages(ParseEntity<ConsoleParseData> consoleResult) {
+    public EngineAnalyze run(Collection<URL> sources) {
         long start = System.nanoTime();
-        List<WebPage> webPages = webPagesCollector.collect(consoleResult
-                .getEntity()
-                .getUrls());
+        List<WebPage> webPages = webPagesCollector.collect(sources);
         long end = System.nanoTime();
-        log.debug( "Time of web information collection: " + new DecimalFormat("#.###").format(((double) end - start) /1_000_000_000)   + "s");
-        return webPages;
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public List<String> text(Collection<WebPage> webPages) {
+        log.debug("Time of web information collection: " + new DecimalFormat("#.###").format(((double) end - start) / 1_000_000_000) + "s");
         start = System.nanoTime();
-        return textCollector.collect(webPages);
+        List<String> text = textParser.parse(textCollector.collect(webPages));
+
+        setData(text);
+
+        if (configuration.getValue(SENTENCES.name()).equals("true")) {
+            analyzeResult.setSentences(sentencesAnalyzer.sentencesAnalyze(searchableWords));
+        }
+
+        if (configuration.getValue(CHARS.name()).equals("true")) {
+            analyzeResult.setChars(charsAnalyzer.charsAnalyze());
+        }
+
+        if (configuration.getValue(WORDS.name()).equals("true")) {
+            analyzeResult.setWords(wordAnalyzer.wordsAnalyze(searchableWords));
+        }
+
+        end = System.nanoTime();
+        log.debug("Time of full analyze: " + new DecimalFormat("#.###").format(((double) end - start) / 1_000_000_000) + "s");
+        return analyzeResult;
     }
 
     /**
-     * {@inheritDoc}
+     * @param data Data setter
      */
-    @Override
-    public ParseEntity<WebPageText> parse(List<String> text) {
-        return textParser.parse(text);
-    }
-
-    /**
-     * {@inheritDoc}
-     */
-    @Override
-    public void analyze(ParseEntity<WebPageText> parseEntity) {
-        setData(parseEntity
-                .getEntity()
-                .getText());
-
-        if (ApplicationPropertiesConfiguration.configuration().getValue(SENTENCES)) {
-            sentencesAnalyzer.sentencesAnalyze(words);
-        }
-
-        if (ApplicationPropertiesConfiguration.configuration().getValue(CHARS_NUMBER)) {
-            charsAnalyzer.charsAnalyze();
-        }
-
-        if (ApplicationPropertiesConfiguration.configuration().getValue(WORDS_NUMBER)) {
-            wordAnalyzer.wordsAnalyze(words);
-        }
-
-        long end = System.nanoTime();
-        log.debug( "Time of full analyze: " + new DecimalFormat("#.###").format(((double) end - start) / 1_000_000_000)  + "s");
-
-    }
-
-    /**
-     * @param data
-     * Data setter
-     */
-    private void setData(List<String> data){
+    private void setData(List<String> data) {
         sentencesAnalyzer.data(data);
         charsAnalyzer.data(data);
         wordAnalyzer.data(data);
     }
 
-    WebScraperEngine(){
-
+    WebScraperEngine(Configuration configuration) {
+        this.configuration = configuration;
     }
 
     /**
      * setters
      */
-
-    void setConsoleParser(ConsoleParser consoleParser) {
-        this.consoleParser = consoleParser;
-    }
 
     void setWebPagesCollector(WebPagesCollector webPagesCollector) {
         this.webPagesCollector = webPagesCollector;
@@ -169,5 +109,9 @@ public class WebScraperEngine implements Engine{
 
     void setWordAnalyzer(WordAnalyzer wordAnalyzer) {
         this.wordAnalyzer = wordAnalyzer;
+    }
+
+    void setSearchableWords(List<String> searchableWords) {
+        this.searchableWords = searchableWords;
     }
 }
