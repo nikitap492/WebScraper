@@ -138,9 +138,6 @@ public class DefaultConsoleParser implements ConsoleParser {
         String enable = Boolean.toString(true);
         for (String option : args) {
             switch (option.toUpperCase()) {
-                case "-V":
-                    configuration.setProperty(Property.VERBOSE.name(), enable);
-                    break;
                 case "-C":
                     configuration.setProperty(Property.CHARS.name(), enable);
                     break;
@@ -151,7 +148,7 @@ public class DefaultConsoleParser implements ConsoleParser {
                     configuration.setProperty(Property.SENTENCES.name(), enable);
                     break;
                 default:
-                    log.error(option + " is unknown option. Full list option is {-v, -c , -w, -e}");
+                    log.error(option + " is unknown option. Full list option is { -c , -w, -e}");
                     throw new UnknownOptionWasFoundException(option);
             }
         }

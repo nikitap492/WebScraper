@@ -7,5 +7,5 @@ package scraper.domain;
  * All current configuration properties
  */
 public enum  Property {
-    SENTENCES, WORDS, VERBOSE, CHARS
+    SENTENCES, WORDS, CHARS
 }
