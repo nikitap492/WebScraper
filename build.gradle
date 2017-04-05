@@ -28,7 +28,6 @@ dependencies {
     testCompile 'org.mockito:mockito-all:1.9.5'
 }
 
-check.dependsOn jacocoTestReport
 
 test {
     exclude "**/**"
@@ -41,4 +40,4 @@ jacocoTestReport {
     }
 }
 
-check { finalizedBy jacocoTestReport }
+check.dependsOn jacocoTestReport
