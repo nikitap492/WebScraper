@@ -1,8 +1,8 @@
 package scraper.url.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import scraper.exceptions.URLParseException;
-import scraper.logger.Logger;
-import scraper.logger.LoggerFactory;
 import scraper.url.URLFileReader;
 import scraper.url.URLValidator;
 
@@ -21,7 +21,7 @@ import java.util.stream.Collectors;
  */
 public class DefaultURLFileReader implements URLFileReader {
 
-    private static final Logger log = LoggerFactory.obtain(URLFileReader.class);
+    private static final Logger log = LoggerFactory.getLogger(URLFileReader.class);
 
     /**
      *
