@@ -7,10 +7,9 @@ import java.util.List;
  * @since 31.03.2017.
  *
  * Web pages parse entity is obtained to {@link scraper.collector.WebPagesCollector}
- * implements marker interface {@link Parsable}
  * and is parsed by {@link scraper.parser.TextParser}
  */
-public class WebPage implements Parsable{
+public class WebPage  {
 
     private final List<String> text;
 
