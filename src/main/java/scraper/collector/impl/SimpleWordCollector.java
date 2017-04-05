@@ -1,8 +1,8 @@
 package scraper.collector.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import scraper.collector.WordCollector;
-import scraper.logger.Logger;
-import scraper.logger.LoggerFactory;
 
 import java.util.Arrays;
 import java.util.Collection;
@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
  */
 public class SimpleWordCollector implements WordCollector {
 
-    private static final Logger log = LoggerFactory.obtain(SimpleWordCollector.class);
+    private static final Logger log = LoggerFactory.getLogger(SimpleWordCollector.class);
 
     @Override
     public List<String> collect(Collection<String> collection) {

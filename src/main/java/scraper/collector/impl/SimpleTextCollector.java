@@ -1,9 +1,9 @@
 package scraper.collector.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import scraper.collector.TextCollector;
 import scraper.domain.WebPage;
-import scraper.logger.Logger;
-import scraper.logger.LoggerFactory;
 
 import java.util.Collection;
 import java.util.List;
@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
  */
 public class SimpleTextCollector implements TextCollector {
 
-    private static final Logger log = LoggerFactory.obtain(TextCollector.class);
+    private static final Logger log = LoggerFactory.getLogger(TextCollector.class);
 
     @Override
     public List<String> collect(Collection<WebPage> webPages) {

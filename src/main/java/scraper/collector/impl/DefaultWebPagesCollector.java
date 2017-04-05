@@ -1,10 +1,10 @@
 package scraper.collector.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import scraper.collector.WebPagesCollector;
 import scraper.domain.WebPage;
 import scraper.exceptions.CollectorProcessException;
-import scraper.logger.Logger;
-import scraper.logger.LoggerFactory;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -21,7 +21,7 @@ import java.util.List;
  */
 public class DefaultWebPagesCollector implements WebPagesCollector {
 
-    private static final Logger log = LoggerFactory.obtain(DefaultWebPagesCollector.class);
+    private static final Logger log = LoggerFactory.getLogger(DefaultWebPagesCollector.class);
 
     @Override
     public List<WebPage> collect(Collection<URL> urls) throws CollectorProcessException {
