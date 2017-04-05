@@ -31,7 +31,7 @@ dependencies {
 check.dependsOn jacocoTestReport
 
 test {
-    exclude "./**"
+    exclude "**/**"
 }
 
 jacocoTestReport {

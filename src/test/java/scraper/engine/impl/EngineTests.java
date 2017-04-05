@@ -33,12 +33,6 @@ public class EngineTests {
 
     @BeforeClass
     public static void createMock(){
-
-
-
-
-
-
         Configuration configuration = mock(ApplicationPropertiesConfiguration.class);
         when(configuration.getValue(Property.SENTENCES.name())).thenReturn("true");
         when(configuration.getValue(Property.WORDS.name())).thenReturn("true");
