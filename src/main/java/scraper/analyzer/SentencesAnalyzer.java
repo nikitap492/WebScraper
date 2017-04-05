@@ -8,7 +8,7 @@ import java.util.Map;
  * @since 01.04.17.
  *
  * {@link scraper.analyzer.SentencesAnalyzer}
- * Print all sentences of parsed text for all webpages
+ * Print all sentences of parsed text for all web pages
  */
 public interface SentencesAnalyzer extends Analyzer {
 

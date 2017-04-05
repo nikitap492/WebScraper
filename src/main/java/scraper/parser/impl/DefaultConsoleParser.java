@@ -131,7 +131,7 @@ public class DefaultConsoleParser implements ConsoleParser {
      * @param args
      * list of options.
      * @throws UnknownOptionWasFoundException
-     * then option is unknowm
+     * then option is unknown
      */
     private Configuration properties(List<String> args) {
         Configuration configuration = new ApplicationPropertiesConfiguration();

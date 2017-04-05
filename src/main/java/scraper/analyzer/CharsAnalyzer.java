@@ -5,7 +5,7 @@ package scraper.analyzer;
  * @since 01.04.17.
  *
  * {@link scraper.analyzer.CharsAnalyzer}
- * count all chars of parsed text for all webpages
+ * count all chars of parsed text for all web pages
  */
 public interface CharsAnalyzer extends Analyzer {
 
