@@ -1,57 +1,42 @@
 package scraper.config;
 
-import scraper.domain.Property;
-import scraper.logger.Logger;
-import scraper.logger.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Properties;
 
 /**
  * @author Poshivalov Nikita
  * @since 31.03.2017.
  */
-public class ApplicationPropertiesConfiguration implements PropertiesConfiguration {
+public class ApplicationPropertiesConfiguration implements Configuration {
 
-    private static final Logger log = LoggerFactory.obtain(ApplicationPropertiesConfiguration.class);
-    private Map<Property, Boolean> map;
-    private static PropertiesConfiguration configuration = null;
+    private static final Logger log = LoggerFactory.getLogger(ApplicationPropertiesConfiguration.class);
+    private Properties properties;
 
-    /**
-     * All properties disables by default
-     */
-    private ApplicationPropertiesConfiguration() {
-        this.map = new HashMap<>();
-        for (Property property : Property.values()){
-            map.put(property, false);
-        }
+    public ApplicationPropertiesConfiguration() {
+       properties = new Properties();
+    }
+
+    public ApplicationPropertiesConfiguration(Properties properties) {
+        this.properties = properties;
     }
 
     /**
      *{@inheritDoc}
      */
     @Override
-    public void setProperty(Property property, boolean value) {
-        map.put(property, value);
+    public void setProperty(String property, String value) {
+        properties.setProperty(property, value);
     }
 
     /**
      *{@inheritDoc}
      */
     @Override
-    public boolean getValue(Property property) {
-        return map.get(property);
+    public String getValue(String property) {
+        return properties.getProperty(property);
     }
 
-    /**
-     * Singleton with lazy initialization for logger
-     * @return {@link ApplicationPropertiesConfiguration}
-     */
-    public static PropertiesConfiguration configuration(){
-        if (configuration == null) {
-            configuration = new ApplicationPropertiesConfiguration();
-        }
-        return configuration;
-    }
 
 }

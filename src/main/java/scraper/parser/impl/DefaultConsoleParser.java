@@ -1,15 +1,15 @@
 package scraper.parser.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import scraper.config.ApplicationPropertiesConfiguration;
+import scraper.config.Configuration;
 import scraper.domain.ConsoleParseData;
-import scraper.domain.ParseEntity;
 import scraper.domain.Property;
 import scraper.exceptions.InputWasNotFoundException;
 import scraper.exceptions.MissingWordsException;
 import scraper.exceptions.URLParseException;
 import scraper.exceptions.UnknownOptionWasFoundException;
-import scraper.logger.Logger;
-import scraper.logger.LoggerFactory;
 import scraper.parser.ConsoleParser;
 import scraper.url.URLFileReader;
 import scraper.url.impl.DefaultURLFileReader;
@@ -32,16 +32,16 @@ import java.util.stream.Collectors;
  */
 public class DefaultConsoleParser implements ConsoleParser {
 
-    private static final Logger log = LoggerFactory.obtain(DefaultConsoleParser.class);
+    private static final Logger log = LoggerFactory.getLogger(DefaultConsoleParser.class);
 
-   private URLFileReader urlFileReader = new DefaultURLFileReader();
+    private URLFileReader urlFileReader = new DefaultURLFileReader();
 
 
     /**
      * {@inheritDoc}
      */
     @Override
-    public ParseEntity<ConsoleParseData> parse(List<String> args) {
+    public ConsoleParseData parse(List<String> args) {
 
         log.info("Parsing...");
 
@@ -55,7 +55,7 @@ public class DefaultConsoleParser implements ConsoleParser {
             throw new MissingWordsException();
         }
 
-        setConfigurationProperties(args.subList(2, args.size()));
+        Configuration properties = properties(args.subList(2, args.size()));
 
         List<URL> urls = obtainUrls(args.get(0));
 
@@ -71,13 +71,14 @@ public class DefaultConsoleParser implements ConsoleParser {
                 .collect(Collectors.joining(", ")) );
 
 
-        return ParseEntity.body(new ConsoleParseData(urls, words));
+        return new ConsoleParseData(urls, words, properties);
     }
 
 
     /**
      * Setter for
      * @param URLFileReader
+     * using for obtain sources from file
      */
     public void setURLFileReader(URLFileReader URLFileReader) {
         this.urlFileReader = URLFileReader;
@@ -123,14 +124,7 @@ public class DefaultConsoleParser implements ConsoleParser {
         return Arrays.asList(words.toUpperCase().split(","));
     }
 
-    /**
-     * Quick wrapper for
-     * @param property
-     * configuration
-     */
-    private void quickSetter(Property property) {
-        ApplicationPropertiesConfiguration.configuration().setProperty(property, true);
-    }
+
 
     /**
      * Methods takes
@@ -139,20 +133,22 @@ public class DefaultConsoleParser implements ConsoleParser {
      * @throws UnknownOptionWasFoundException
      * then option is unknowm
      */
-    private void setConfigurationProperties(List<String> args) {
+    private Configuration properties(List<String> args) {
+        Configuration configuration = new ApplicationPropertiesConfiguration();
+        String enable = Boolean.toString(true);
         for (String option : args) {
             switch (option.toUpperCase()) {
                 case "-V":
-                    quickSetter(Property.VERBOSE);
+                    configuration.setProperty(Property.VERBOSE.name(), enable);
                     break;
                 case "-C":
-                    quickSetter(Property.CHARS_NUMBER);
+                    configuration.setProperty(Property.CHARS.name(), enable);
                     break;
                 case "-W":
-                    quickSetter(Property.WORDS_NUMBER);
+                    configuration.setProperty(Property.WORDS.name(), enable);
                     break;
                 case "-E":
-                    quickSetter(Property.SENTENCES);
+                    configuration.setProperty(Property.SENTENCES.name(), enable);
                     break;
                 default:
                     log.error(option + " is unknown option. Full list option is {-v, -c , -w, -e}");
@@ -160,6 +156,7 @@ public class DefaultConsoleParser implements ConsoleParser {
             }
         }
         log.info("Setup of configuration is over");
+        return configuration;
     }
 
 

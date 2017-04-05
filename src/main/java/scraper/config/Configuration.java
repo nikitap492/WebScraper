@@ -8,4 +8,7 @@ package scraper.config;
  * Exists for further extensions
  */
 public interface Configuration {
+    void setProperty(String property, String value);
+
+    String getValue(String property);
 }

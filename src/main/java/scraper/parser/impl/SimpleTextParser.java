@@ -1,9 +1,7 @@
 package scraper.parser.impl;
 
-import scraper.domain.ParseEntity;
-import scraper.domain.WebPageText;
-import scraper.logger.Logger;
-import scraper.logger.LoggerFactory;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import scraper.parser.TextParser;
 
 import java.util.ArrayList;
@@ -17,16 +15,14 @@ import java.util.List;
  */
 public class SimpleTextParser implements TextParser {
 
-    private static final Logger log = LoggerFactory.obtain(SimpleTextParser.class);
+    private static final Logger log = LoggerFactory.getLogger(SimpleTextParser.class);
 
 
     /**
      * @param text is data from URL
-     * @return {@link ParseEntity<WebPageText>}
-     * that contains text from web pages {@link WebPageText#text}
      */
     @Override
-    public ParseEntity<WebPageText> parse(List<String> text) {
+    public List<String> parse(List<String> text) {
         log.debug("Parsing html text...");
         ArrayList<String> parseText = new ArrayList<>();
         for (String str : text) {
@@ -44,6 +40,6 @@ public class SimpleTextParser implements TextParser {
             }
         }
         log.debug("Parsing is complete");
-        return ParseEntity.body(new WebPageText(parseText));
+        return parseText;
     }
 }
