@@ -1,6 +1,7 @@
 package scraper.analyzer;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Poshivalov Nikita
@@ -16,5 +17,5 @@ public interface WordAnalyzer extends Analyzer {
      * @param words
      * will be printed quantity
      */
-    void wordsAnalyze(List<String> words);
+    Map<String, Long> wordsAnalyze(List<String> words);
 }

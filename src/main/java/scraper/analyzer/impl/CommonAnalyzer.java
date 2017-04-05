@@ -1,15 +1,13 @@
 package scraper.analyzer.impl;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import scraper.analyzer.CharsAnalyzer;
 import scraper.analyzer.SentencesAnalyzer;
 import scraper.analyzer.WordAnalyzer;
 import scraper.collector.WordCollector;
-import scraper.logger.Logger;
-import scraper.logger.LoggerFactory;
 
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.List;
+import java.util.*;
 
 /**
  * @author Poshivalov Nikita
@@ -21,7 +19,7 @@ import java.util.List;
  */
 public class CommonAnalyzer implements WordAnalyzer, CharsAnalyzer, SentencesAnalyzer {
 
-    private static final Logger log = LoggerFactory.obtain(CommonAnalyzer.class);
+    private static final Logger log = LoggerFactory.getLogger(CommonAnalyzer.class);
 
     private List<String> sentences;
 
@@ -54,33 +52,29 @@ public class CommonAnalyzer implements WordAnalyzer, CharsAnalyzer, SentencesAna
      * {@inheritDoc}
      */
     @Override
-    public void wordsAnalyze(List<String> searchableWord){
-        log.debug("Started word analyze");
-        searchableWord.forEach(this::singleWordAnalyze);
+    public Map<String, Long> wordsAnalyze(List<String> searchableWord){
+        log.debug("Word analyze");
+        Map<String, Long> result = new HashMap<>();
+        searchableWord.forEach(word -> result.put(word, allWords
+                                                            .stream()
+                                                            .filter(word.toUpperCase()::equals)
+                                                            .count()));
+        return result;
     }
 
     /**
-     * Analyze of single word
-     * @param word
-     */
-    private void singleWordAnalyze(String word){
-        long counter = allWords
-                .stream()
-                .filter(word.toUpperCase()::equals)
-                .count();
-        log.info("Word : " + word + " was found in sources " + counter + " times");
-    }
-
-    /**
-     * @param searchableWord is words for which will be printed sentences
+     * @see SentencesAnalyzer
+     * @param searchableWord is words for which will be find sentences
+     * @return map of words and sentences which contain word
      */
     @Override
-    public void sentencesAnalyze(List<String> searchableWord){
-        log.debug("Started sentences analyze");
+    public Map<String, List<String>> sentencesAnalyze(List<String> searchableWord){
+        log.debug("Sentences analyze");
 
+        Map<String, List<String>> result = new HashMap<>();
         searchableWord
                 .stream()
-                .peek(n -> log.info("Trying find " + n + " in sentences"))
+                .peek(word -> result.put(word, new ArrayList<>()))
                 .forEach((word) -> sentences
                             .stream()
                             .filter(sentence -> Arrays.stream(sentence
@@ -89,20 +83,21 @@ public class CommonAnalyzer implements WordAnalyzer, CharsAnalyzer, SentencesAna
                                             .split(" "))
                                             .filter(word.toUpperCase()::equals)
                                             .count() > 0)
-                            .forEach(log::info));
+                            .forEach(result.get(word)::add));
+        return result;
     }
 
     /**
      * @see CharsAnalyzer
+     * @return Number of all chars on web pages
      */
     @Override
-    public void charsAnalyze(){
-        log.debug("Started chars analyze");
-        long chars = sentences
+    public Long charsAnalyze(){
+        log.debug("Chars analyze");
+        return sentences
                 .stream()
                 .flatMapToInt(CharSequence::chars)
                 .count();
-        log.info("Sum of chars on web pages equals " + chars);
     }
 
 

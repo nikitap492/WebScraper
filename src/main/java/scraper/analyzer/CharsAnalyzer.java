@@ -9,5 +9,5 @@ package scraper.analyzer;
  */
 public interface CharsAnalyzer extends Analyzer {
 
-    void charsAnalyze();
+    Long charsAnalyze();
 }

@@ -1,6 +1,7 @@
 package scraper.analyzer;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author Poshivalov Nikita
@@ -15,5 +16,5 @@ public interface SentencesAnalyzer extends Analyzer {
     /**
      * @param searchableWord is words for which will be printed sentences
      */
-    void sentencesAnalyze(List<String> searchableWord);
+    Map<String, List<String>> sentencesAnalyze(List<String> searchableWord);
 }
