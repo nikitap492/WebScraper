@@ -7,14 +7,15 @@ apply plugin: 'jacoco'
 sourceCompatibility = 1.8
 
 
-jar {
-    manifest {
-        attributes(
-                'Main-Class': 'scraper.WebScraper'
-        )
-    }
-    baseName 'scraper'
+
+task fatJar(type: Jar) {
+    baseName = 'scraper'
     version = null
+    from { configurations.compile.collect { it.isDirectory() ? it : zipTree(it) } }
+    with jar
+    manifest {
+        attributes 'Main-Class': 'scraper.WebScraper'
+    }
 }
 
 repositories {
@@ -41,3 +42,4 @@ jacocoTestReport {
 }
 
 check.dependsOn jacocoTestReport
+jar.dependsOn fatJar
