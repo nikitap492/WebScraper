@@ -38,5 +38,10 @@ public class ApplicationPropertiesConfiguration implements Configuration {
         return properties.getProperty(property);
     }
 
+    @Override
+    public boolean hasProperty(String property) {
+        return properties.containsKey(property);
+    }
+
 
 }

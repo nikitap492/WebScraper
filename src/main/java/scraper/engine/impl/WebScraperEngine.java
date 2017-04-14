@@ -53,15 +53,15 @@ class WebScraperEngine implements Engine {
 
         setData(text);
 
-        if (configuration.getValue(SENTENCES.name()).equals("true")) {
+        if (configuration.hasProperty(SENTENCES.name()) && configuration.getValue(SENTENCES.name()).equals("true")) {
             analyzeResult.setSentences(sentencesAnalyzer.sentencesAnalyze(searchableWords));
         }
 
-        if (configuration.getValue(CHARS.name()).equals("true")) {
+        if (configuration.hasProperty(CHARS.name()) && configuration.getValue(CHARS.name()).equals("true")) {
             analyzeResult.setChars(charsAnalyzer.charsAnalyze());
         }
 
-        if (configuration.getValue(WORDS.name()).equals("true")) {
+        if (configuration.hasProperty(WORDS.name()) && configuration.getValue(WORDS.name()).equals("true")) {
             analyzeResult.setWords(wordAnalyzer.wordsAnalyze(searchableWords));
         }
 

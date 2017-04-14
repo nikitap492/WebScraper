@@ -15,6 +15,10 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static scraper.domain.Property.CHARS;
+import static scraper.domain.Property.SENTENCES;
+import static scraper.domain.Property.WORDS;
+
 /**
  * @author Poshivalov Nikita
  * @since 31.03.2017.
@@ -65,10 +69,20 @@ public class WebScraper {
                 .run(sources);
 
         //simple output
-        analyze.words().forEach((word, counter) -> log.info("Word : " + word + " was found in sources " + counter + " times"));
-        analyze.sentences()
-                .forEach((word, sentences) -> log.info("Word : " + word + " was found in sentences ' " + sentences + " '"));
-        log.info("Sum of chars on web pages equals " + analyze.chars());
+        if (configuration.hasProperty(WORDS.name()) && configuration.getValue(WORDS.name()).equals("true")) {
+            analyze.words().forEach((word, counter) -> log.info("Word : " + word + " was found in sources " + counter + " times"));
+        }
+        if (configuration.hasProperty(SENTENCES.name()) && configuration.getValue(SENTENCES.name()).equals("true")) {
+            analyze.sentences()
+                    .forEach((word, sentences) -> log.info("Word : " + word + " was found in sentences ' " + sentences + " '"));
+        }
+        if (configuration.hasProperty(CHARS.name()) && configuration.getValue(CHARS.name()).equals("true")) {
+            log.info("Sum of chars on web pages equals " + analyze.chars());
+        }
+
+
+
+
     }
 
 }

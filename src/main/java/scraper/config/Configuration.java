@@ -11,4 +11,6 @@ public interface Configuration {
     void setProperty(String property, String value);
 
     String getValue(String property);
+
+    boolean hasProperty(String property);
 }
